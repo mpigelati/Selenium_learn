@@ -28,22 +28,25 @@ def excel_import():
 
 
 
-username="v-mosaip@microsoft.com"
+username="saimohansai@gmail.com"
 
 password=""
 driver = webdriver.Chrome(r'C:\Python3.7\chromedriver.exe')
 #driver.implicitly_wait()
-Prod = "https://manage.kaiza.la"
-alpha= https://manage-alpha.kaiza.la
-Pre-prod= https://manage-preprod.kaiza.la
+#kaizala_web1 = "https://manage.kaiza.la"
+prod     = "https://manage.kaiza.la"
+alpha    = "https://manage-alpha.kaiza.la"
+pre_prod  = "https://manage-preprod.kaiza.la"
+
 
 #driver = new WebDriverWait(driver, 10);
-driver.get(kaizala_web1)
+driver.get(prod)
 driver.maximize_window()
 
 driver.find_element_by_id("i0116").send_keys(username)
 driver.find_element_by_id("idSIButton9").click()
 driver.implicitly_wait(20)
+
 
 def Group_create(driver):
     print("Group Ceate")
@@ -56,9 +59,11 @@ def Group_create(driver):
     driver.find_element_by_css_selector("input[type=\"file\"]").send_keys("C:\\Users\\v-mosaip\\Desktop\\Groups\\G1.csv")
     driver.find_element_by_xpath('//*[@id="upload-groups"]/div/div/div[3]/div/button[1]').click()
     driver.implicitly_wait(20)
+    time.sleep(20)
     driver.find_elements_by_xpath('// *[ @ id = "uploaded-groups-tasks"] / div / div / div[1] / button')
     driver.implicitly_wait(30)
     print("After Creating Group_Bulk_Upload",driver.current_url)
+    time.sleep(30)
     driver.refresh()
 
 
@@ -96,6 +101,8 @@ def add_User_To_Group(driver,mynumber):
     time.sleep(20)
     print("Number added")
 
+
+
 def bulk_Upload(driver):
     time.sleep(20)
     print("Export username")
@@ -127,22 +134,50 @@ def CreateGroup_AddBulkUpload_AddUsersTOGroup(driver):
     driver.implicitly_wait(20)
     driver.find_element_by_id("create-group").click()
     driver.find_element_by_id("one").click()
-    driver.find_element_by_id("group-name").send_keys("dat")
+    driver.find_element_by_id("group-name").send_keys("data")
     driver.find_element_by_xpath("//*[@id='createGroup']/div/div/div[2]/div[1]/button").click()
     print("Group Created ")
 
     print("Started Bulk Upload Start ")
-    #bulk_Upload(driver)
+    bulk_Upload(driver)
     print("Bulk upload End and Refresh Page done")
 
     print("Add User To Group one by one")
     my_list = ["9886789980","9177550666","9866731937"]
     for number in my_list:
         add_User_To_Group(driver,number)
+    driver.back()
+    driver.refresh()
+    user_Search(driver)
+    Group_Search(driver)
+
+def user_Search(driver):
+    print("User search started")
+    driver.find_element_by_id("Group").click()  # here we can use by ID or Xpath # Alternative (driver.find_element_by_xpath("//*[@id='Group']/div").click())
+    # driver.find_element_by_id("group - bulkupload - dropdown").click()
+    driver.implicitly_wait(20)
+    driver.find_element_by_xpath('//*[@id="conversations-module"]/div[7]/div/div/div[2]/div/select').send_keys("User")
+    driver.find_element_by_xpath('//*[@id="conversations-module"]/div[7]/div/div/div[2]/div/input').send_keys("9886789980")
+    driver.find_element_by_xpath('//*[@id="conversations-module"]/div[7]/div/div/div[2]/div/a/img').click()
+    time.sleep(30)
+    driver.refresh()
+
+def Group_Search(driver):
+    print("Group search started")
+    driver.find_element_by_id("Group").click()  # here we can use by ID or Xpath # Alternative (driver.find_element_by_xpath("//*[@id='Group']/div").click())
+    # driver.find_element_by_id("group - bulkupload - dropdown").click()
+    driver.implicitly_wait(20)
+    driver.find_element_by_xpath('//*[@id="conversations-module"]/div[7]/div/div/div[2]/div/select').send_keys("Group")
+    driver.find_element_by_xpath('//*[@id="conversations-module"]/div[7]/div/div/div[2]/div/input').send_keys("data")
+    driver.find_element_by_xpath('//*[@id="conversations-module"]/div[7]/div/div/div[2]/div/a/img').click()
+    time.sleep(30)
+    driver.refresh()
 
 
 
 Group_create(driver)
-
 CreateGroup_AddBulkUpload_AddUsersTOGroup(driver)
+#Group_Search(driver)
+#user_Search(driver)
+
 
