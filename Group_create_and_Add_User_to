@@ -1,0 +1,147 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+#from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
+import os
+
+import xlrd
+import time
+import pandas as pd
+import csv
+
+def excel_import():
+    #print("hellow world")
+    GroupIdList=[]
+    with open("C:\\Users\\v-mosaip\\Downloads\\GroupInfo.csv", "rt",) as fd:
+        data= csv.reader(fd)
+        for num,line, in enumerate(data):
+            if num > 0:
+                #print(line)
+                print(line[1])
+                GroupIdList.append(line[1])
+    return GroupIdList
+
+
+
+
+
+username="v-mosaip@microsoft.com"
+
+password=""
+driver = webdriver.Chrome(r'C:\Python3.7\chromedriver.exe')
+#driver.implicitly_wait()
+kaizala_web1 = "https://manage.kaiza.la"
+
+
+#driver = new WebDriverWait(driver, 10);
+driver.get(kaizala_web1)
+driver.maximize_window()
+
+driver.find_element_by_id("i0116").send_keys(username)
+driver.find_element_by_id("idSIButton9").click()
+driver.implicitly_wait(20)
+
+def Group_create(driver):
+    print("Group Ceate")
+    driver.find_element_by_id("Group").click() # here we can use by ID or Xpath # Alternative (driver.find_element_by_xpath("//*[@id='Group']/div").click())
+    #driver.find_element_by_id("group - bulkupload - dropdown").click()
+    driver.implicitly_wait(20)
+    print("Before Creating Group_Bulk_Upload",driver.current_url)
+    driver.find_element_by_id("group-bulkupload-dropdown-elmt").click()
+    driver.find_element_by_id("upload").click()
+    driver.find_element_by_css_selector("input[type=\"file\"]").send_keys("C:\\Users\\v-mosaip\\Desktop\\Groups\\G1.csv")
+    driver.find_element_by_xpath('//*[@id="upload-groups"]/div/div/div[3]/div/button[1]').click()
+    driver.implicitly_wait(20)
+    driver.find_elements_by_xpath('// *[ @ id = "uploaded-groups-tasks"] / div / div / div[1] / button')
+    driver.implicitly_wait(30)
+    print("After Creating Group_Bulk_Upload",driver.current_url)
+    driver.refresh()
+
+
+def add_User_To_Group(driver,mynumber):
+
+    print("add users to group")
+
+    #driver.implicitly_wait(10)
+    print("start")
+    print(driver.current_url)
+    print(driver.current_window_handle)
+
+    time.sleep(10)
+    #driver.find_element_by_id("group-bulkupload-dropdown").click()
+    #driver.find_elements_by_xpath("//*[@id='group-bulkupload-dropdown-elmt']/ul/li[1]")
+    print("Current status")
+    print(driver.current_url)
+    print(driver.current_window_handle)
+    time.sleep(10)
+
+    print("start adding number")
+    print("adding number to portal",mynumber)
+    driver.find_element_by_id("group-bulkupload-dropdown-elmt").click()
+    driver.find_element_by_xpath("//*[@id='group-bulkupload-dropdown-elmt']/ul/li[1]").click()
+    #driver.find_element_by_xpath('//*[@id="addByPhoneModal"]/div/div/div[2]/table/tbody/tr/td[1]/select').send_keys("+93 Afghanistan")
+    driver.find_element_by_xpath('//*[@id="addByPhoneModal"]/div/div/div[2]/table/tbody/tr/td[1]/select').send_keys("+91 India")
+    #driver.find_element_by_xpath('//*[@id="addByPhoneModal"]/div/div/div[2]/table/tbody/tr/td[1]/select').send_keys("+1 Canada")
+    driver.implicitly_wait(20)
+    driver.find_element_by_id("phoneNumberInput").clear()
+    driver.implicitly_wait(20)
+    driver.find_element_by_id("phoneNumberInput").send_keys(mynumber)
+    #driver.find_element_by_xpath('//*[@id="addByPhoneModal"]/div/div/div[2]/table/tbody/tr/td[3]/select').send_keys("As Admin")
+    driver.find_element_by_xpath('//*[@id="addByPhoneModal"]/div/div/div[2]/table/tbody/tr/td[3]/select').send_keys("As Member")
+    driver.find_element_by_xpath('//*[@id="addByPhoneModal"]/div/div/div[2]/div[2]/button').click()
+    time.sleep(20)
+    print("Number added")
+
+def bulk_Upload(driver):
+    time.sleep(20)
+    print("Export username")
+    #print(driver.current_url)
+    print(driver.current_window_handle)
+    driver.find_element_by_id("group-bulkupload-dropdown-elmt").click()
+    driver.find_element_by_xpath('//*[@id="group-bulkupload-dropdown-elmt"]/ul/li[2]').click()
+    print("current Csv file upload",driver.current_url)
+
+
+    driver.implicitly_wait(20)
+    driver.find_element_by_id("group-data-file").send_keys("C:\\Users\\v-mosaip\\Desktop\\Groups\\G2.csv")
+    time.sleep(20)
+    print(driver.current_window_handle)
+    driver.find_element_by_xpath('//*[@id="groupUploadCSVDragArea"]/button').click()
+    time.sleep(30)
+    print(driver.current_window_handle)
+    driver.find_element_by_xpath('//*[@id="uploaded-groups-tasks"]/div/div/div[1]/button').click()
+    time.sleep(30)
+    driver.refresh()
+
+
+
+
+def CreateGroup_AddBulkUpload_AddUsersTOGroup(driver):
+    print("Create Group ")
+    driver.find_element_by_id("Group").click() # here we can use by ID or Xpath # Alternative (driver.find_element_by_xpath("//*[@id='Group']/div").click())
+    #driver.find_element_by_id("group - bulkupload - dropdown").click()
+    driver.implicitly_wait(20)
+    driver.find_element_by_id("create-group").click()
+    driver.find_element_by_id("one").click()
+    driver.find_element_by_id("group-name").send_keys("dat")
+    driver.find_element_by_xpath("//*[@id='createGroup']/div/div/div[2]/div[1]/button").click()
+    print("Group Created ")
+
+    print("Started Bulk Upload Start ")
+    #bulk_Upload(driver)
+    print("Bulk upload End and Refresh Page done")
+
+    print("Add User To Group one by one")
+    my_list = ["9886789980","9177550666","9866731937"]
+    for number in my_list:
+        add_User_To_Group(driver,number)
+
+
+
+Group_create(driver)
+
+CreateGroup_AddBulkUpload_AddUsersTOGroup(driver)
+
