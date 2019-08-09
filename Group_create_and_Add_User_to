@@ -33,8 +33,9 @@ username="v-mosaip@microsoft.com"
 password=""
 driver = webdriver.Chrome(r'C:\Python3.7\chromedriver.exe')
 #driver.implicitly_wait()
-kaizala_web1 = "https://manage.kaiza.la"
-
+Prod = "https://manage.kaiza.la"
+alpha= https://manage-alpha.kaiza.la
+Pre-prod= https://manage-preprod.kaiza.la
 
 #driver = new WebDriverWait(driver, 10);
 driver.get(kaizala_web1)
