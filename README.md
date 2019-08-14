@@ -2,90 +2,43 @@ Hellow selinium
 https://chercher.tech/python/table-selenium-python
 
 
-
-
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-#from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
-import os
-
-import xlrd
-import time
-import pandas as pd
-import csv
-
-username
-
-password=""
-driver = webdriver.Chrome(r'C:\Python3.7\chromedriver.exe')
-#driver.implicitly_wait()
-#kaizala_web1 = "https://manage.kaiza.la"
-prod     = "https://manage.kaiza.la"
-
-
-#driver = new WebDriverWait(driver, 10);
-driver.get(alpha)
-driver.maximize_window()
-
-driver.find_element_by_id("i0116").send_keys(username)
-driver.find_element_by_id("idSIButton9").click()
-driver.implicitly_wait(20)
-
 def listgroups(driver):
     #time.sleep(30)
     driver.find_element_by_id("Group").click() # here we can use by ID or Xpath # Alternative (driver.find_element_by_xpath("//*[@id='Group']/div").click())
 
     mypath="//*[@id = 'tableOrgGroupsConversations']/tbody/tr"
-
-    driver.implicitly_wait(20)
-
-    time.sleep(30)
+    mypath1 = "//*[@id = 'tableOrgGroupsConversations']/tbody"
 
     Rows = len(driver.find_elements_by_xpath(mypath))
     print("number of rows", Rows)
-    print(type(Rows))
-#    count =0
-    ro = []
+
     for count in range(1,Rows+1):
-        print("row_count",count)
-        mystr=mypath+'/td['+str(count)+']/span[2]/a/span[1]'
-        print(mystr)
 
-        mystr1 = mypath +'/td['+ str(count)+']/span[2]/a/span[1][//@class="ng-binding"]'
-        mystr1.__getattribute__()
+        print("===================>Starting index",count)
+        temp = Rows
+        #print("===================>Rows", Rows)
+        string = mypath1 + '/tr[' + str(temp) + ']/td/span/a/span[1]'
+        string1 = mypath1 + '/tr[' + str(temp) + ']/td[2]/span'
 
+        data1 = driver.find_element_by_xpath(string1)
+        #print("mystring", string1)
+        if data1.text != "Member":
+            print("Admin-Member-->", data1.text)
 
-#        //td[@colspan="10"]
-#        print(mystr1)
- #       time.sleep(30)
-  #      data= driver.find_element_by_xpath(mystr1)
-        #print(data.text())
+            print("mystring",string)
+            data=driver.find_element_by_xpath(string)
+            print("Group-->",data.text)
 
-    #print(ro)
-
-    #driver.get_screenshot_as_file("sample.png")
-
-    #colun=len((driver.find_elements_by_xpath("//*[@id = 'tableOrgGroupsConversations']/tbody/tr[1]/td")))
-    #print("colun",colun)
-
-
-
-
-#"//*[@id = 'tableOrgGroupsConversations']/tbody/tr/td/span[2]/a/span"
-
-
-
-listgroups(driver)
-#Group_create(driver)
-#CreateGroup_AddBulkUpload_AddUsersTOGroup(driver)
-#Group_Search(driver,"Testing_1")
-#user_Search(driver)
-
-
-
+            select_element= driver.find_element_by_xpath(mypath1+'/tr[' + str(temp)+']/td[5]')
+            select_element.click()
+            driver.find_element_by_xpath(mypath1+'/tr[' + str(temp)+']/td[5]/div/ul/li[3]/a').click()
+            driver.find_element_by_xpath("//*[@id='delete-group-modal']/div/div/div[2]/button[2]").click()
+            time.sleep(50)
+            #print("Deleted Group ",data.text)
+            time.sleep(50)
+            temp = temp - count
+            print("Temp-->",temp)
+            driver.refresh()
+        print("----------------------------------------")
 
 
