@@ -174,7 +174,32 @@ def Group_Search(driver):
     driver.refresh()
 
 
+def listgroups(driver):
+    #time.sleep(30)
+    driver.find_element_by_id("Group").click() # here we can use by ID or Xpath # Alternative (driver.find_element_by_xpath("//*[@id='Group']/div").click())
 
+    mypath="//*[@id = 'tableOrgGroupsConversations']/tbody/tr"
+    mypath1 = "//*[@id = 'tableOrgGroupsConversations']/tbody"
+
+    Rows = len(driver.find_elements_by_xpath(mypath))
+    print("number of rows", Rows)
+    print(type(Rows))
+    ro = []
+    for count in range(1,Rows+1):
+        string = mypath1 + '/tr[' + str(count) + ']/td/span/a/span[1]'
+        string1 = mypath1 + '/tr[' + str(count) + ']/td[2]/span'
+
+        data1 = driver.find_element_by_xpath(string1)
+        #print("mystring", string1)
+        if data1.text != "Member":
+            print("Admin-Member-->", data1.text)
+
+            #print("mystring",string)
+            data=driver.find_element_by_xpath(string)
+            print("Group-->",data.text)
+        print("----------------------------------------")
+
+listgroups(driver)
 Group_create(driver)
 CreateGroup_AddBulkUpload_AddUsersTOGroup(driver)
 #Group_Search(driver)
